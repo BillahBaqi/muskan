@@ -46,7 +46,7 @@ class FrontendController extends Controller
     }
 
     public function myaccount(){
-        return view('frontend.userprofile');
+        return view('user.profile');
     }
 
     public function success(){
