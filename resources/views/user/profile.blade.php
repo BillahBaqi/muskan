@@ -239,7 +239,7 @@
             <div class="fluid-container mt-5">
                 <div class="row">
                     <div class="col-lg-3 my-lg-0 my-md-1">
-                        <div id="sidebar" class="bg-secondary">
+                        <div id="sidebar" class="bg-light">
                             <div class="h4 text-white">Account</div>
                             <ul>
                                 <li class="active"> <a href="#" class="text-decoration-none d-flex align-items-start">
@@ -338,15 +338,14 @@
                                         </div>
                                         <div class="progressbar-track">
                                             <ul class="progressbar">
-                                                <li id="step-1" class="text-muted green"> <span class="fas fa-gift"></span>
+                                                <li id="step-1" class="text-muted green"> <span class="fa fa-gift"></span>
                                                 </li>
-                                                <li id="step-2" class="text-muted green"> <span class="fas fa-check"></span>
+                                                <li id="step-2" class="text-muted green"> <span class="fa fa-check"></span>
                                                 </li>
-                                                <li id="step-3" class="text-muted green"> <span class="fas fa-box"></span>
                                                 </li>
-                                                <li id="step-4" class="text-muted green"> <span class="fas fa-truck"></span>
+                                                <li id="step-4" class="text-muted green"> <span class="fa fa-truck"></span>
                                                 </li>
-                                                <li id="step-5" class="text-muted green"> <span class="fas fa-box-open"></span>
+                                                <li id="step-5" class="text-muted green"> <span class="fa fa-box-open"></span>
                                                 </li>
                                             </ul>
                                             <div id="tracker"></div>
