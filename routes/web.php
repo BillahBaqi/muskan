@@ -21,6 +21,7 @@ Route::get('/admin/users', [HomeController::class, 'users']);
 //FrontendController
 Route::get('/', [FrontendController::class, 'welcome']);
 Route::get('/account/user', [FrontendController::class, 'myaccount']);
+Route::get('/account/orders', [FrontendController::class, 'orders']);
 Route::get('/products/details/{product_id}', [FrontendController::class, 'details']);
 Route::get('/shop', [FrontendController::class, 'shop']);
 Route::get('/category/{category_name}', [FrontendController::class, 'category']);

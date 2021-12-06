@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Order_Product_Details;
 use App\Models\ProductThumbnail;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -45,8 +48,24 @@ class FrontendController extends Controller
         return view('frontend.single', compact('product_details', 'categories', 'related_product', 'thumbnails'));
     }
 
-    public function myaccount(){
-        return view('user.profile');
+    public function orders(){
+        $orders = Order::where('user_id', Auth::id())->get();        
+        $total_order = Order::where('user_id', Auth::id())->count();
+        return view('user.orders', [
+            'orders' => $orders,
+            'total_order' => $total_order,
+        ]);
+    }
+
+    public function myaccount()
+    {
+        $orders = Order::where('user_id', Auth::id())->get();
+        $orders_id = Order::where('user_id', Auth::id())->first();
+        $total_order = Order::where('user_id', Auth::id())->count();
+        return view('user.profile', [
+            'orders' => $orders,
+            'total_order' => $total_order,
+        ]);
     }
 
     public function success(){

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('coupon')
+@section('coupons')
     active
 @endsection
 @section('title')

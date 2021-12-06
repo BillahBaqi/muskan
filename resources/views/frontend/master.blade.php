@@ -94,7 +94,7 @@
                                     <a href="javascript:void(0);"><i class="fa fa-user"></i> My Account
                                         ({{ Auth::user()->name }})<i class="fa fa-angle-down"></i></a>
                                     <ul class="dropdown_style">
-                                        <li><a href="{{ url('/account/user') }}">My Profile</a></li>
+                                        <li><a href="{{ url('/account/orders') }}">My Profile</a></li>
                                         <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                                  document.getElementById('logout-form').submit();"> logout
                                             </a></li>

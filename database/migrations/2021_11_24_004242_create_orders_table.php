@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->integer('payment_method')->nullable();
             $table->string('status', 20)->nullable();
             $table->integer('transaction_id')->nullable();
+            $table->string('track', 20)->nullable();
             $table->timestamps();
         });
     }
