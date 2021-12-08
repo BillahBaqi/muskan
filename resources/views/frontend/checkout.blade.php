@@ -105,7 +105,7 @@
                         <div class="checkout-form form-style">
                             <h3>Billing Details</h3>
                             <div class="row">
-                                 @if (session('success'))
+                                @if (session('success'))
                                     <div class="alert alert-success" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -219,147 +219,150 @@
                                         </form>
                                     </div>
                                     <!-- stripe-payment info-->
-                                    <div id="stripe-payment" class="tab-pane form-group fade pt-3 order-area">
-                                        <form role="form" action="{{route('stripe.post')}}" method="post"
-                                        class="require-validation" data-cc-on-file="false"  id="payment-form">
-                                        @csrf
-                                        
-                                        <div class="row">
-                                            <div class="col-sm-6 col-12">
-                                                <p>Full Name *</p>
-                                                <input readonly type="text" value="{{ Auth::user()->name }}">
-                                            </div>
+                                    <div id="stripe-payment" class="tab-pane fade pt-3 order-area">
+                                        <form role="form" action="{{ route('stripe.post') }}" method="post"
+                                            class="require-validation" data-cc-on-file="false"
+                                            data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
+                                            @csrf
 
-                                            <div class="col-sm-6 col-12">
-                                                <p>Email Address *</p>
-                                                <input readonly type="email" value="{{ Auth::user()->email }}">
-                                            </div>
-
-                                            <div class="col-sm-6 col-12">
-                                                <p>Country *</p>
-                                                <select name="c_country_id" id="country_select1">
-                                                    <option value="">-Select Your Country- </option>
-                                                    @foreach ($countries as $country)
-                                                        <option value="{{ $country->id }}">{{ $country->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('c_country_id')
-                                                    <div style="margin-top:-25px;" class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-sm-6 col-12">
-                                                <p>Town/City *</p>
-                                                <select name="c_city_id" id="city_select1">
-                                                    <option value="">-Select Your City- </option>
-                                                </select>
-                                                @error('c_city_id')
-                                                    <div style="margin-top:-25px;" class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-6 col-12">
-                                                <p>Phone No. *</p>
-                                                <input value="{{ old('phone') }}" type="text" name="c_phone">
-                                                @error('c_phone')
-                                                    <div style="margin-top:-25px;" class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-sm-6 col-12">
-                                                <p>Postcode/ZIP</p>
-                                                <input value="{{ old('zip') }}" type="text" name="c_zip">
-                                                @error('c_zip')
-                                                    <div style="margin-top:-25px;" class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-12">
-                                                <p>Your Address *</p>
-                                                <input value="{{ old('address') }}" type="text" name="c_address">
-                                                @error('c_address')
-                                                    <div style="margin-top:-25px;" class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-12">
-                                                <p>Order Notes </p>
-                                                <textarea name="notes" id="notes"
-                                                    placeholder="Notes about Your Order, e.g.Special Note for Delivery">{{ Request::old('notes') }}</textarea>
-
-                                            </div>
-
-                                            <div class="col-12">
-                                                <br>
-                                                <h4>Card Information</h4>
-                                                <hr>
-                                            </div>
-
-                                            <div class='col-6 col-sm-6 form-group required'>
-                                                <label class='control-label'>Card Holder</label> <input name="card_holder" class='form-control'
-                                                    size='4' type='text'>
-                                            </div>
-
-                                            <div class='col-6 col-sm-6 form-group required'>
-                                                <label class='control-label'>Card Number</label> <input name="card_number" autocomplete='off'
-                                                    class='form-control card-number' size='20' type='text'>
-                                            </div>
-
-                                            <div class='col-4 col-md-4 form-group cvc required' style="margin-top: -10px;">
-                                                <label class='control-label'>CVC</label> <input name="cvc" autocomplete='off'
-                                                    class='form-control card-cvc' placeholder='ex. 311' size='4' type='text'>
-                                            </div>
-                                            <div class='col-4 col-md-4 form-group expiration required'
-                                                style="margin-top: -10px;">
-                                                <label class='control-label'>Expiration Month</label> <input name="month"
-                                                    class='form-control card-expiry-month' placeholder='MM' size='2'
-                                                    type='text'>
-                                            </div>
-                                            <div class='col-4 col-md-4 form-group expiration required'
-                                                style="margin-top: -10px;">
-                                                <label class='control-label'>Expiration Year</label> <input name="year"
-                                                    class='form-control card-expiry-year' placeholder='YYYY' size='4'
-                                                    type='text'>
-                                            </div>
-
-                                            <div class='col-12 error form-group d-none'>
-                                                <div class='alert-danger alert'>Please correct the errors and try
-                                                    again.
+                                            <div class="row">
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Full Name *</p>
+                                                    <input readonly type="text" value="{{ Auth::user()->name }}">
                                                 </div>
-                                            </div>
-                                            @if (session('error'))
-                                                <div class='col-12 error form-group'>
-                                                <div class='alert-danger alert'>
-                                                    {{session('error')}}
+
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Email Address *</p>
+                                                    <input readonly type="email" value="{{ Auth::user()->email }}">
                                                 </div>
+
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Country *</p>
+                                                    <select name="c_country_id" id="country_select1">
+                                                        <option value="">-Select Your Country- </option>
+                                                        @foreach ($countries as $country)
+                                                            <option value="{{ $country->id }}">{{ $country->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('c_country_id')
+                                                        <div style="margin-top:-25px;" class="text-danger">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Town/City *</p>
+                                                    <select name="c_city_id" id="city_select1">
+                                                        <option value="">-Select Your City- </option>
+                                                    </select>
+                                                    @error('c_city_id')
+                                                        <div style="margin-top:-25px;" class="text-danger">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Phone No. *</p>
+                                                    <input value="{{ old('phone') }}" type="text" name="c_phone">
+                                                    @error('c_phone')
+                                                        <div style="margin-top:-25px;" class="text-danger">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-sm-6 col-12">
+                                                    <p>Postcode/ZIP</p>
+                                                    <input value="{{ old('zip') }}" type="text" name="c_zip">
+                                                    @error('c_zip')
+                                                        <div style="margin-top:-25px;" class="text-danger">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <p>Your Address *</p>
+                                                    <input value="{{ old('address') }}" type="text" name="c_address">
+                                                    @error('c_address')
+                                                        <div style="margin-top:-25px;" class="text-danger">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <p>Order Notes </p>
+                                                    <textarea name="notes" id="notes"
+                                                        placeholder="Notes about Your Order, e.g.Special Note for Delivery">{{ Request::old('notes') }}</textarea>
+
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <br>
+                                                    <h4>Card Information</h4>
+                                                    <hr>
+                                                </div>
+
+                                                <div class='col-6 col-sm-6 form-group required'>
+                                                    <label class='control-label'>Card Holder</label> <input name="card_holder"
+                                                        class='form-control' size='4' type='text'>
+                                                </div>
+
+                                                <div class='col-6 col-sm-6 form-group required'>
+                                                    <label class='control-label'>Card Number</label> <input name="card_number"
+                                                        autocomplete='off' class='form-control card-number' size='20'
+                                                        type='text'>
+                                                </div>
+
+                                                <div class='col-4 col-md-4 form-group cvc required' style="margin-top: -10px;">
+                                                    <label class='control-label'>CVC</label> <input name="cvc"
+                                                        autocomplete='off' class='form-control card-cvc' placeholder='ex. 311'
+                                                        size='4' type='text'>
+                                                </div>
+                                                <div class='col-4 col-md-4 form-group expiration required'
+                                                    style="margin-top: -10px;">
+                                                    <label class='control-label'>Expiration Month</label> <input name="month"
+                                                        class='form-control card-expiry-month' placeholder='MM' size='2'
+                                                        type='text'>
+                                                </div>
+                                                <div class='col-4 col-md-4 form-group expiration required'
+                                                    style="margin-top: -10px;">
+                                                    <label class='control-label'>Expiration Year</label> <input name="year"
+                                                        class='form-control card-expiry-year' placeholder='YYYY' size='4'
+                                                        type='text'>
+                                                </div>
+
+                                                <div class='col-12 error form-group d-none'>
+                                                    <div class='alert-danger alert'>Please correct the errors and try
+                                                        again.
+                                                    </div>
+                                                </div>
+                                                @if (session('error'))
+                                                    <div class='col-12 error form-group'>
+                                                        <div class='alert-danger alert'>
+                                                            {{ session('error') }}
+                                                        </div>
+                                                    </div>
+                                                @endif
+
                                             </div>
+
+
+                                            <input type="hidden" name="subtotal" value="{{ $total }}">
+                                            <input type="hidden" name="discount"
+                                                value="{{ ($total / 100) * $discount_from_cart }}">
+                                            <input type="hidden" name="total"
+                                                value="{{ $total - ($total / 100) * $discount_from_cart + $shiping_cost }}">
+                                            @if ($in_stock == false || $total == 0)
+                                                <button disabled style="background:#868e96"
+                                                    onclick="window.location.href = '{{ url('/cart') }}';">Cart epmty/Out of
+                                                    Stock</button>
+                                            @else
+                                                <input type="hidden" name="coupon" value="{{ $coupon }}">
+                                                <button type="submit">Stripe Order</button>
                                             @endif
-
-                                        </div>
-
-
-                                        <input type="hidden" name="subtotal" value="{{ $total }}">
-                                        <input type="hidden" name="discount"
-                                            value="{{ ($total / 100) * $discount_from_cart }}">
-                                        <input type="hidden" name="total"
-                                            value="{{ $total - ($total / 100) * $discount_from_cart + $shiping_cost }}">
-                                        @if ($in_stock == false || $total == 0)
-                                            <button disabled style="background:#868e96"
-                                                onclick="window.location.href = '{{ url('/cart') }}';">Cart epmty/Out of
-                                                Stock</button>
-                                        @else
-                                            <input type="hidden" name="coupon" value="{{ $coupon }}">
-                                            <button type="submit">Stripe Order</button>
-                                        @endif
                                         </form>
                                     </div>
                                     <!-- cash on Delivery -->
@@ -449,7 +452,7 @@
                                                     onclick="window.location.href = '{{ url('/cart') }}';">Cart epmty/Out of
                                                     Stock</button>
                                             @else
-                                                <button>jhdsakhaskjfhakfsj</button>
+                                                <button>Order Place</button>
                                             @endif
                                         </form>
                                     </div>
@@ -592,14 +595,14 @@
                     $inputs = $form.find('.required').find(inputSelector),
                     $errorMessage = $form.find('div.error'),
                     valid = true;
-                $errorMessage.addClass('d-none');
+                $errorMessage.addClass('hide');
 
                 $('.has-error').removeClass('has-error');
                 $inputs.each(function(i, el) {
                     var $input = $(el);
                     if ($input.val() === '') {
                         $input.parent().addClass('has-error');
-                        $errorMessage.removeClass('d-none');
+                        $errorMessage.removeClass('hide');
                         e.preventDefault();
                     }
                 });
@@ -620,7 +623,7 @@
             function stripeResponseHandler(status, response) {
                 if (response.error) {
                     $('.error')
-                        .removeClass('d-none')
+                        .removeClass('hide')
                         .find('.alert')
                         .text(response.error.message);
                 } else {
