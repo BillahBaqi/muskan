@@ -351,6 +351,7 @@
 
 
                                             <input type="hidden" name="subtotal" value="{{ $total }}">
+                                            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                                             <input type="hidden" name="discount"
                                                 value="{{ ($total / 100) * $discount_from_cart }}">
                                             <input type="hidden" name="total"
