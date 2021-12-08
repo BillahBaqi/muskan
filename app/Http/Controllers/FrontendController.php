@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Cart;
 use App\Models\Order;
-use App\Models\Order_Product_Details;
 use App\Models\ProductThumbnail;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use PDF;
 use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
@@ -72,5 +68,27 @@ class FrontendController extends Controller
         return view('frontend.success');
     }
 
+    public function invoice($order_id)
+    {
+        $order = Order::where('id', $order_id)->first();
+        return view('frontend.invoice', [
+            'order' => $order,
+        ]);
+    }
+
+    public function invoice_download($order_id){
+
+        $order = Order::find($order_id);
+        // return view('frontend.invoice-pdf', [
+        //     'order' => $order,
+        // ]);
+        
+        
+        $pdf = PDF::loadView('user.invoice-pdf', [
+            'order' =>   $order,
+        ]);
+
+        return $pdf->download('invoice.pdf');
+    }
 
 }

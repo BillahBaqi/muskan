@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 Route::get('/admin', [HomeController::class, 'index']);
 Route::get('/admin/users', [HomeController::class, 'users']);
+Route::post('/admin/user/insert', [HomeController::class, 'insert']);
 
 //FrontendController
 Route::get('/', [FrontendController::class, 'welcome']);
@@ -26,6 +27,8 @@ Route::get('/products/details/{product_id}', [FrontendController::class, 'detail
 Route::get('/shop', [FrontendController::class, 'shop']);
 Route::get('/category/{category_name}', [FrontendController::class, 'category']);
 Route::get('/order/success', [FrontendController::class, 'success']);
+Route::get('/invoice/{order_id}', [FrontendController::class, 'invoice']);
+Route::get('/invoice/download/{order_id}', [FrontendController::class, 'invoice_download']);
 
 
 

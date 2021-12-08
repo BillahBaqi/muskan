@@ -247,10 +247,11 @@
                                             <span>
                                                 <h6>Order Date: 10/12/2021</h6>
                                             </span>
-                                            <h6>Discount: {{ $order->discount }}</h6>
+                                            {{-- <h6>Discount: {{ $order->discount }}</h6> --}}
                                             <span>
                                                 <h6>Amount: {{ $order->amount }}</h6>
                                             </span>
+                                            <a target="_blank" href="{{url('/invoice/download/')}}/{{$order->id}}" class="btn btn-cancel" data-abc="true">Download Invoice</a>
                                         </div>
 
                                         <div class="col-9 text-right">
@@ -303,7 +304,7 @@
                                                             src="{{ asset('uploads/product') }}/{{ $item->product_photo }}"
                                                             class="img-sm border"></div>
                                                     <figcaption class="info align-self-center">
-                                                        <p class="title">{{ $item->product_name }}</p> <span class="text-muted">৳{{$item->product_price }}</span>
+                                                        <p class="title">{{ $item->product_name }}</p> <span class="text-muted">৳{{$item->product_price }} x {{App\Models\Order_Product_Details::find(App\Models\Order_Product_Details::where('order_id', $order->id)->where('product_id', $item->id)->first()->id)->product_quantity}}</span>
                                                     </figcaption>
                                                 </figure>
                                             </li>

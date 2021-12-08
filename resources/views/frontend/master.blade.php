@@ -104,6 +104,21 @@
                                         </form>
                                     </ul>
                                 </li>
+                                @elseif(Auth::user()->role === 'MOD')
+                                <li>
+                                    <a href="javascript:void(0);"><i class="fa fa-user"></i> My Account
+                                        ({{ Auth::user()->name }})<i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown_style">
+                                        <li><a href="{{ url('/admin') }}">Dashboard</a></li>
+                                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                 document.getElementById('logout-form').submit();"> logout
+                                            </a></li>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            class="d-none">
+                                            @csrf
+                                        </form>
+                                    </ul>
+                                </li>
                                 @endif
                                 
                             @else

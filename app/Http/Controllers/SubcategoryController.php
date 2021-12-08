@@ -7,7 +7,6 @@ use App\Models\Subcategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\SubcategoryRequest;
-use App\Models\Cart;
 
 class SubcategoryController extends Controller
 {
