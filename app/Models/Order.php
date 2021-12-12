@@ -9,6 +9,8 @@ class Order extends Model
 {
     use HasFactory;
     protected $fillable = [
-        // 'category_name',
+        'transaction_id',
+        'status',
+        'currency',
     ];
 }

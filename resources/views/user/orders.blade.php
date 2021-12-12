@@ -288,7 +288,7 @@
                                             @elseif($order->status == 'Canceled')
                                                 <a href="#" class="btn btn-cancel" data-abc="true">Payment Failed/Pay Now</a>
                                             @else
-                                                <a href="#" class="btn btn-cancel" data-abc="true">Payment Pending</a>
+                                                <a href="{{url('/epayment')}}/{{$order->id}}" class="btn btn-cancel" data-abc="true">Payment Pending/Pay Now</a>
                                             @endif
                                         </div>
                                     </div>

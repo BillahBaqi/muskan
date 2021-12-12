@@ -47,7 +47,7 @@
             
         <a href="{{ url('/admin/coupon') }}" class="br-menu-link @yield('coupons')">
             <div class="br-menu-item">
-                <i class="menu-item-icon icon ion-ios-browsers-outline tx-24"></i>
+                <i class="menu-item-icon icon ion-ios-barcode-outline tx-24"></i>
                 <span class="menu-item-label">Coupons</span>
             </div><!-- menu-item -->
         </a><!-- br-menu-link -->

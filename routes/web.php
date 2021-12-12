@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SslCommerzPaymentController;
+use App\Http\Controllers\StripePaymentController;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Support\Facades\Auth;
 
@@ -87,9 +88,9 @@ Route::post('/admin/coupon/insert', [CouponController::class, 'insert']);
 Route::get('/admin/coupon/delete/{coupon_id}', [CouponController::class, 'delete']);
 
 // SSLCOMMERZ Start
-Route::get('/epayment', [SslCommerzPaymentController::class, 'epayment'])->name('epayment');
+Route::get('/epayment/{order_id}', [SslCommerzPaymentController::class, 'epayment'])->name('epayment');
 
-Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay', [SslCommerzPaymentController::class, 'index'])->name('pay');
 Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 
 Route::post('/success', [SslCommerzPaymentController::class, 'success']);
@@ -97,6 +98,8 @@ Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
 Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
 
 Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+Route::get('/pay-online/{order_id}', [StripePaymentController::class, 'payonline'])->name('stripe.view');
+
 //SSLCOMMERZ END
 
 

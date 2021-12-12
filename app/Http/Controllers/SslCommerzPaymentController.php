@@ -12,6 +12,8 @@ use App\Models\Order_Product_Details;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Country;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +22,17 @@ use Illuminate\Support\Facades\Auth;
 class SslCommerzPaymentController extends Controller
 {
 
-    public function epayment()
+    public function epayment($order_id)
     {
-       //
+        $categories = Category::all();
+        $order_products = Order::where('id',$order_id)->first();
+        $countries = Country::select('id', 'name')->get();
+        return view('epayment', [
+            'categories' => $categories,
+            'countries' => $countries,
+            'order_products' => $order_products,
+            'order_id' => $order_id,
+        ]);
     }
 
     public function index(Request $request)
@@ -32,7 +42,7 @@ class SslCommerzPaymentController extends Controller
         # In "orders" table, order unique identity is "transaction_id". "status" field contain status of the transaction, "amount" is the order amount to be paid and "currency" is for storing Site Currency which will be checked with paid currency.
 
         $post_data = array();
-        $post_data['total_amount'] = $request->total; # You cant not pay less than 10
+        $post_data['total_amount'] = $request->amount; # You cant not pay less than 10
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = uniqid(); // tran_id must be unique
 
@@ -70,50 +80,13 @@ class SslCommerzPaymentController extends Controller
         $post_data['value_d'] = "ref004";
 
         #Before  going to initiate the payment order status need to insert or update as Pending.
-        $order_id =  Order::insertGetId([
-            'user_id' => Auth::id(),
-            'discount' => $request->discount,
-            'sub_total' => $request->subtotal,
-            'amount' => $request->total,
-            'currency' => $post_data['currency'],
-            'payment_method' => 2,
-            'status' => 'Pending',
-            'transaction_id' => $post_data['tran_id'],
-            'created_at' => Carbon::now(),
-        ]);
-
-        Order_Billing_details::insert([
-            'user_id' => Auth::id(),
-            'order_id' => $order_id,
-            'phone' => $request->s_phone,
-            'zip' => $request->s_zip,
-            'country_id' => $request->s_country_id,
-            'city_id' => $request->s_city_id,
-            'address' => $request->s_address,
-            'notes' => $request->s_notes,
-            'created_at' => Carbon::now(),
-        ]);
-
-        $cart_products = Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->get();
-        foreach ($cart_products as $cart_product) {
-            $product_name = Product::find($cart_product->product_id)->product_name;
-            $product_price = Product::find($cart_product->product_id)->product_price;
-            Order_Product_Details::insert([
-                'user_id' => Auth::id(),
-                'order_id' => $order_id,
-                'product_id' => $cart_product->product_id,
-                'product_name' => $product_name,
-                'product_price' => $product_price,
-                'product_quantity' => $cart_product->product_quantity,
-                'created_at' => Carbon::now(),
-            ]);
-            Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->delete();
-            Product::where('id', $cart_product->product_id)->decrement('quantity', $cart_product->product_quantity);
-        }
+        
         $update_product = DB::table('orders')
-        ->where('transaction_id', $post_data['tran_id'])
-            ->updateOrInsert([
-
+        ->where('id', $request->order_id)
+            ->update([
+                'status' => 'Pending',
+                'transaction_id' => $post_data['tran_id'],
+                'currency' => $post_data['currency'],
             ]);
         
 

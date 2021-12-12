@@ -1,248 +1,224 @@
-@include('frontend.parts.epage')
+@extends('frontend.master')
 
-{{-- body Start --}}
 
-<body class="pop_up_mobile_device" data-spy="scroll" data-target=".js-scrollspy" data-new-gr-c-s-check-loaded="14.1040.0"
-    data-gr-ext-installed="" cz-shortcut-listen="true">
+@section('cart')
+    active
+@endsection
 
-    <header class="site-header">
+@section('title')
+    Best Care for Baby.
+@endsection
+
+@section('style')
+
+    <style>
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
+            color: #fff;
+            background-color: #ef4836;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            font-family: 'Montserrat', sans-serif
+        }
+
+
+
+        .card {
+            position: relative;
+            background: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .1)
+        }
+
+        small {
+            font-size: 12px
+        }
+
+        .cart {
+            line-height: 1
+        }
+
+        .icon {
+            background-color: #eee;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%
+        }
+
+        .pic {
+            width: 70px;
+            height: 90px;
+            border-radius: 5px
+        }
+
+        td {
+            vertical-align: middle
+        }
+
+        .red {
+            color: #fd1c1c;
+            font-weight: 600
+        }
+
+        .b-bottom {
+            border-bottom: 2px dotted black;
+            padding-bottom: 20px
+        }
+
+        p {
+            margin: 0px
+        }
+
+        table input {
+            width: 40px;
+            border: 1px solid #eee
+        }
+
+        input:focus {
+            border: 1px solid #eee;
+            outline: none
+        }
+
+        .round {
+            background-color: #eee;
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .unregistered {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #eee;
+            text-transform: uppercase;
+            font-size: 14px
+        }
+
+        input {
+            width: 100%;
+            margin-right: 20px
+        }
+
+        .sale {
+            width: 100%;
+            background-color: #e9b3b3;
+            text-transform: uppercase;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5PX 0
+        }
+
+        .red {
+            color: #fd1c1c
+        }
+
+        .del {
+            width: 35px;
+            height: 35px;
+            object-fit: cover
+        }
+
+        .delivery .card {
+            padding: 10px 5px
+        }
+
+    </style>
+
+@endsection
+
+@section('content')
+
+    <!-- .breadcumb-area start -->
+    <div class="breadcumb-area bg-img-4 ptb-100">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
+                    <div class="breadcumb-wrap text-center">
+                        <h2>Shop Page</h2>
+                        <ul>
+                            <li><a href="{{ url('/') }}">Home</a></li>
+                            <li><span>Shop</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- .breadcumb-area end -->
 
-                    <a href="/" class="site-header__logo mr-auto">
-                        <img src="{{ asset('dashboard/img/muskan-logo-front.PNG') }}" alt="" width="220">
-                    </a>
-
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </header><!-- /.site-header -->
-
-    {{-- <div class="hero-subheader cart_subheader">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="align-container" data-mh="">
-                    <div class="align-inner">
-                        
-                        <h1 class="hero-subheader__title">Ecommerce Cart</h1>
-                    </div><!-- /.align-inner -->
-                </div><!-- /.align-container -->
-            </div><!-- /.col -->
-
-        </div><!-- /.row -->
-    </div><!-- /.container -->
-</div><!-- /.hero-subheader --> --}}
-
-    <div class="section home_section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <p> </p>
-                    <div class="content">
-                        <div class="table-responsive">
-                            <table class="table cart_table">
-                                <thead>
-                                    <tr>
-                                        <th>#sl</th>
-                                        <th>Product</th>
-                                        <th>Available</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-right">Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $in_stock = true;
-                                        $total = 0;
-                                    @endphp
-                                    @foreach ($cart_products as $cart_product)
-                                        <tr>
-                                            <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ App\Models\Product::find($cart_product->product_id)->product_name }}
-                                            </td>
-                                            <td>
-                                                @if ($cart_product->product_quantity > App\Models\Product::find($cart_product->product_id)->quantity)
-                                                    Out of Stock
-                                                    @php
-                                                        $in_stock = false;
-                                                    @endphp
-                                                @else
-                                                    In Stock
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <input class="" type="text"
-                                                    value="{{ $cart_product->product_quantity }}">
-                                            </td>
-                                            <td class="text-right">
-                                                <span><span
-                                                        class="single_amount">{{ App\Models\Product::find($cart_product->product_id)->product_price * $cart_product->product_quantity }}
-                                                    </span> Taka</span>
-                                            </td>
-
-                                        </tr>
-                                        @php
-                                            $total = $total + App\Models\Product::find($cart_product->product_id)->product_price * $cart_product->product_quantity;
-                                        @endphp
+    <!-- checkout-area start -->
+    @auth()
+            <div class="checkout-area ptb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5 m-auto">
+                        <div class="order-area">
+                            <form action="{{route('pay')}}" method="post">
+                            @csrf
+                            <h3 class="text-center">Pay Online</h3>
+                            
+                            @if ($order_products->status == null)
+                                <ul class="total-cost">
+                                
+                                    @foreach (App\Models\Product::find(App\Models\Order_Product_Details::where('order_id', $order_id)->get('product_id')) as $item)
+                                        <li>{{ $item->product_name }} x {{App\Models\Order_Product_Details::find(App\Models\Order_Product_Details::where('order_id', $order_id)->where('product_id', $item->id)->first()->id)->product_quantity}} <span
+                                                class="pull-right">৳{{$item->product_price * App\Models\Order_Product_Details::find(App\Models\Order_Product_Details::where('order_id', $order_id)->where('product_id', $item->id)->first()->id)->product_quantity }}</span>
+                                        </li>
                                     @endforeach
 
 
-                                </tbody>
-                            </table>
+                                    <li>Sub-total <span class="pull-right"><strong>৳{{ $order_products->sub_total }}</strong></span>
+                                    </li>
+                                    <li>Discount <span
+                                            class="pull-right">৳{{ $order_products->discount }}</span></li>
+
+                                    <li>Shipping <span class="pull-right">৳40</span></li>
+                                    @php
+                                        $shiping_cost = 40;
+                                    @endphp
+                                    
+
+                                    <li>Total<span
+                                            class="pull-right">৳{{ $order_products->amount }}</span>
+                                    </li>
+                                </ul>
+                                 <input type="hidden" name="amount"
+                                value="{{ $order_products->amount }}">
+                            <input type="hidden" name="order_id"
+                                value="{{ $order_id }}">
+                            <button type="submit">Pay ৳{{$order_products->amount}}</button>
+                            @else
+                                <h5 class="text-center">Payment Allready Successfull</h5>
+                            @endif
+                            
+                           
+                           
                         </div>
-                        <div class="row">
-                            <div class="col-md-7">
-                            </div>
-                            <div class="col-md-5">
-                                <form action="{{ url('/pay') }}" method="POST" class="needs-validation">
-                                    <input type="hidden" value="{{ csrf_token() }}" name="_token" />
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-left">Subtotal</td>
-                                                    <td class="text-right">
-                                                        <span class="single_amount "><span
-                                                                class="sub_total">{{ $total }}</span>
-                                                            Taka</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-left">Discount</td>
-                                                    <td class="text-right">
-                                                        <span class="single_amount">{{ ($total / 100) * $discount }}
-                                                            Taka</span>
-                                                            <input type="hidden" name="discount" id="total_amount"
-                                                            value="{{ ($total / 100) * $discount }}">
-                                                    </td>
-                                                </tr>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
 
-                                                @if ($total == 0)
-                                                    <tr>
-                                                        <td class="text-left">Shipping</td>
-                                                        <td class="text-right">
-                                                            <span class="single_amount">0 Taka</span>
-                                                        </td>
-                                                    </tr>
-                                                    @php
-                                                        $shiping_cost = 0;
-                                                    @endphp
-                                                @else
-                                                    <tr>
-                                                        <td class="text-left">Shipping</td>
-                                                        <td class="text-right">
-                                                            <span class="single_amount">40 Taka</span>
-                                                        </td>
-                                                    </tr>
-                                                    @php
-                                                        $shiping_cost = 40;
-                                                    @endphp
-                                                @endif
+    @else
+        @include('auth.login')
+    @endauth
+    <!-- checkout-area end -->
 
-                                                <tr>
-                                                    <td class="text-left">
-                                                        <strong>Total</strong>
-                                                    </td>
-                                                    <td class="text-right grand_total">
-                                                        <input type="hidden" name="total_amount" id="total_amount"
-                                                            value="{{ $total - ($total / 100) * $discount + $shiping_cost }}">
-                                                        <span class="single_amount "><span
-                                                                class="total_amount1">{{ $total - ($total / 100) * $discount + $shiping_cost }}</span>
-                                                            Taka</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control cus_phone" name="mobile_no" value=""
-                                            placeholder="Mobile Number">
-                                    </div>
-                                    @error('mobile_no')
-                                            <div style="margin-top:-25px;" class="text-danger">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    @if ($in_stock == false || $total == 0)
-                                        <button class="btn btn-warning btn-lg btn-block" disabled>Cart epmty/Out of
-                                            Stock</button>
-                                    @else
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to
-                                            checkout</button>
-                                    @endif
+    <!-- start social-newsletter-section -->
 
-                                </form>
-                            </div>
-                        </div>
-                    </div><!-- /.content -->
-                </div><!-- /.col -->
-                <div class="col-md-4">
-                </div><!-- /.col -->
-
-            </div><!-- /.row -->
-        </div><!-- /.container -->
-    </div><!-- /.section -->
-
-    <div class="js-footer-area">
-
-
-        <footer class="site-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <p class="site-footer__copyright">© 2020 SSLCOMMERZ. All rights reserved.</p>
-
-                    </div><!-- /.col -->
-
-                    <div class="col-sm-6 align-right">
-                    </div><!-- /.col -->
-
-                </div><!-- /.row -->
-            </div><!-- /.container -->
-        </footer><!-- /.site-footer -->
-
-
-    </div><!-- /.js-footer-area -->
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
-
-
-
-    <script>
-        var obj = {};
-        obj.cus_phone = $('#cus_phone').val();
-        obj.amount = $('#total_amount').val();
-
-
-        $('#sslczPayBtn').prop('postdata', obj);
-
-        (function(window, document) {
-            var loader = function() {
-                var script = document.createElement("script"),
-                    tag = document.getElementsByTagName("script")[0];
-                // script.src = "https://seamless-epay.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR LIVE
-                script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(
-                    7); // USE THIS FOR SANDBOX
-                tag.parentNode.insertBefore(script, tag);
-            };
-
-            window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload",
-                loader);
-        })(window, document);
-    </script>
-
-
-</body>
-{{-- body End --}}
-
-</html>
+@endsection
