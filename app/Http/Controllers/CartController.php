@@ -31,7 +31,8 @@ class CartController extends Controller
         }
         $categories = Category::all();
         $cart_products = Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->get();
-        return view('frontend.cart', compact('categories', 'cart_products',  'discount', 'coupon_code'));
+        $cart_count = Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->count();
+        return view('frontend.cart', compact('categories', 'cart_products',  'discount', 'coupon_code', 'cart_count'));
     }
 
     function add_to_cart(Request $request)

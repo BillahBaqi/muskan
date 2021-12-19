@@ -51,6 +51,17 @@
             <div class="col-xs-5">
                 <table style="width: 100%">
                     <tbody>
+                        @if ($order->status == 'Processing')
+                            <tr>
+                                <th>Payment Status:</th>
+                                <td class="text-right">Paid</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <th>Payment Status:</th>
+                                <td class="text-right">Due</td>
+                            </tr>                            
+                        @endif
                         <tr>
                             <th>Order Id:</th>
                             <td class="text-right">{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</td>

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendInvoice;
+
 
 
 
@@ -58,7 +61,7 @@ class CheckoutController extends Controller
         }
         echo $str_to_send;
     }
-    public function order(Request $request)
+    public function order(OrderRequest $request)
     {
         if ($request->payment_method) {
             if ($request->payment_method == 1) {
@@ -67,6 +70,8 @@ class CheckoutController extends Controller
                     'discount' => $request->discount,
                     'sub_total' => $request->subtotal,
                     'amount' => $request->total,
+                    'currency' => 'BDT',
+                    'status' => 'COD',
                     'payment_method' => 1,
                     'created_at' => Carbon::now(),
                 ]);
@@ -99,6 +104,28 @@ class CheckoutController extends Controller
                     Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->delete();
                     Product::where('id', $cart_product->product_id)->decrement('quantity', $cart_product->product_quantity);
                 }
+                //invoice mail
+                $invoice_details = Order::find($order_id);
+                Mail::to(Auth::user()->email)->send(new SendInvoice($invoice_details));
+                
+                //invoice sms
+                $url = "http://66.45.237.70/api.php";
+                $number = $request->phone;
+                $text = "Thanks for your order. Id: #". str_pad($order_id, 5, '0', STR_PAD_LEFT).'. Total:'. $request->total;
+                $data = array(
+                    'username' => "billahbaqi",
+                    'password' => "MYWX4H3C",
+                    'number' => "$number",
+                    'message' => "$text"
+                );
+
+                $ch = curl_init(); // Initialize cURL
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $smsresult = curl_exec($ch);
+                $p = explode("|", $smsresult);
+                $sendstatus = $p[0];
                 return redirect('/order/success');
             }
             elseif ($request->payment_method == 2) {
@@ -148,6 +175,7 @@ class CheckoutController extends Controller
                     'discount' => $request->discount,
                     'sub_total' => $request->subtotal,
                     'amount' => $request->total,
+                    'status' => 'Pending',
                     'payment_method' => 3,
                     'created_at' => Carbon::now(),
                 ]);

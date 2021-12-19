@@ -98,7 +98,13 @@
                 <div class="container">
 
                     <h4 class="tx-normal tx-roboto tx-white">{{ Auth::user()->name }}</h4>
-                    <p class="mg-b-10">Super Admin</p>
+                    @if (Auth::user()->role == 'ADM')
+                    <p class="mg-b-10">Admin</p>
+                    @elseif (Auth::user()->role == 'MOD')
+                    <p class="mg-b-10">Modarator</p>                        
+                    @else
+                    <p class="mg-b-10">User</p>                   
+                    @endif
 
                 </div><!-- card-body -->
             </div><!-- card-profile-img -->

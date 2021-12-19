@@ -15,7 +15,7 @@ use App\Http\Controllers\StripePaymentController;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Support\Facades\Auth;
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 Route::get('/admin', [HomeController::class, 'index']);
 Route::get('/admin/users', [HomeController::class, 'users']);
 Route::post('/admin/user/insert', [HomeController::class, 'insert']);
