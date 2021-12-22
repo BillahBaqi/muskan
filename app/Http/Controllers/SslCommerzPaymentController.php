@@ -6,6 +6,7 @@ use App\Http\Requests\OrderRequest;
 use DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
+use App\Mail\SendInvoice;
 use App\Models\Coupon;
 use App\Models\Order_Billing_details;
 use App\Models\Order_Product_Details;
@@ -17,7 +18,7 @@ use App\Models\Country;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -197,6 +198,35 @@ class SslCommerzPaymentController extends Controller
                 $update_product = DB::table('orders')
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
+                
+                //invoice mail
+                $order_id = DB::table('orders')
+                    ->where('transaction_id', $tran_id)
+                    ->first()->id;
+                $invoice_details = Order::find($order_id);
+                Mail::to(Auth::user()->email)->send(new SendInvoice($invoice_details));
+
+                //invoice sms
+                $url = "http://66.45.237.70/api.php";
+                $number = Order_Billing_details::where('order_id', $order_id)->first()->phone;
+                $text = "Thanks for your order. Id: #" . str_pad($order_id, 5, '0', STR_PAD_LEFT) . '. Total:' . $request->amount;
+                $data = array(
+                    'username' => "billahbaqi",
+                    'password' => "MYWX4H3C",
+                    'number' => "$number",
+                    'message' => "$text"
+                );
+
+                $ch = curl_init(); // Initialize cURL
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch,
+                    CURLOPT_POSTFIELDS,
+                    http_build_query($data)
+                );
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $smsresult = curl_exec($ch);
+                $p = explode("|", $smsresult);
+                $sendstatus = $p[0];
 
                 return redirect('/order/success');
             } else {
@@ -213,6 +243,38 @@ class SslCommerzPaymentController extends Controller
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
              */
+
+            $order_id = DB::table('orders')
+            ->where('transaction_id', $tran_id)
+            ->first()->id;
+            $invoice_details = Order::find($order_id);
+            Mail::to(Auth::user()->email)->send(new SendInvoice($invoice_details));
+
+            //invoice sms
+            $url = "http://66.45.237.70/api.php";
+            $number = Order_Billing_details::where('order_id', $order_id)->first()->phone;
+            $text = "Thanks for your order. Id: #" . str_pad($order_id, 5, '0', STR_PAD_LEFT) . '. Total:' . $request->amount;
+            $data = array(
+                'username' => "billahbaqi",
+                'password' => "MYWX4H3C",
+                'number' => "$number",
+                'message' => "$text"
+            );
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL,
+                $url
+            );
+            curl_setopt(
+                $ch,
+                CURLOPT_POSTFIELDS,
+                http_build_query($data)
+            );
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $smsresult = curl_exec($ch);
+            $p = explode("|", $smsresult);
+            $sendstatus = $p[0];
+            
             return redirect('/order/success');
         } else {
             #That means something wrong happened. You can redirect customer to your product page.

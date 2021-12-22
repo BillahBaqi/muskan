@@ -12,10 +12,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcumb-wrap text-center">
-                        <h2>Shop Page</h2>
+                        <h2>Login Page</h2>
                         <ul>
                             <li><a href="{{ url('/') }}">Home</a></li>
-                            <li><span>Shop</span></li>
+                            <li><span>Login</span></li>
                         </ul>
                     </div>
                 </div>
@@ -75,6 +75,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="account-form form-style">

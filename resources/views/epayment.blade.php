@@ -171,7 +171,7 @@
                             @csrf
                             <h3 class="text-center">Pay Online</h3>
                             
-                            @if ($order_products->status == null)
+                            @if ($order_products->status == 'Pending' || $order_products->status == '')
                                 <ul class="total-cost">
                                 
                                     @foreach (App\Models\Product::find(App\Models\Order_Product_Details::where('order_id', $order_id)->get('product_id')) as $item)

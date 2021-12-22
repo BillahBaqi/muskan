@@ -12,10 +12,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="breadcumb-wrap text-center">
-                        <h2>Shop Page</h2>
+                        <h2>Regitration Page</h2>
                         <ul>
                             <li><a href="{{ url('/') }}">Home</a></li>
-                            <li><span>Shop</span></li>
+                            <li><span>Regitration</span></li>
                         </ul>
                     </div>
                 </div>
@@ -35,38 +35,38 @@
                         value="{{ old('name') }}" required autocomplete="name"
                         autofocus>
                         @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                                <div class="text-danger" style="margin-top: -20px; margin-bottom: 15px;">
+                                    {{ $message }}
+                                </div>
+                        @enderror 
 
                         <p>Email Address *</p>
                         <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email"
                         value="{{ old('email') }}" required autocomplete="email" >
                         @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                                <div class="text-danger" style="margin-top: -20px; margin-bottom: 15px;">
+                                    {{ $message }}
+                                </div>
+                        @enderror 
 
                         <p>Password *</p>
                         <input id="password" type="password" class="@error('password') is-invalid @enderror"
                         name="password" required autocomplete="new-password" >
                         @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                                <div class="text-danger" style="margin-top: -20px; margin-bottom: 15px;">
+                                    {{ $message }}
+                                </div>
+                        @enderror 
                         
                         <p>Confirm Password *</p>
                         <input id="password-confirm" type="password" name="password_confirmation"
                         required autocomplete="new-password">
 
-                        @error('password_confirmation')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        @error('password-confirm')
+                                <div class="text-danger" style="margin-top: -20px; margin-bottom: 15px;">
+                                    {{ $message }}
+                                </div>
+                        @enderror 
                         <button type="submit">Register</button>
                         <div class="text-center">
                             <a href="{{route('login')}}">Or Login</a>

@@ -285,6 +285,36 @@
                                                                 class="fa fa-check"></i>
                                                         </span> <span class="text"> Ready for pickup </span> </div>
                                                 </div>
+                                            @elseif ($order->status == 'COD')
+                                                @php
+                                                    if ($order->track == null) {
+                                                        $confirm = 'active';
+                                                        $currier = false;
+                                                        $ontheway = false;
+                                                    } elseif ($order->track == 'currier') {
+                                                        $confirm = 'active';
+                                                        $currier = 'active';
+                                                        $ontheway = false;
+                                                    } elseif ($order->track == 'ontheway') {
+                                                        $confirm = 'active';
+                                                        $currier = 'active';
+                                                        $ontheway = 'active';
+                                                    }
+                                                @endphp
+                                                <div class="track">
+                                                    <div class="step {{ $confirm }}"> <span class="icon"> <i
+                                                                class="fa fa-check"></i>
+                                                        </span> <span class="text">Order confirmed</span> </div>
+                                                    <div class="step {{ $currier }} "> <span class="icon"> <i
+                                                                class="fa fa-user"></i>
+                                                        </span> <span class="text"> Picked by courier</span> </div>
+                                                    <div class="step {{ $ontheway }}"> <span class="icon"> <i
+                                                                class="fa fa-truck"></i>
+                                                        </span> <span class="text"> On the way </span> </div>
+                                                    <div class="step"> <span class="icon"> <i
+                                                                class="fa fa-check"></i>
+                                                        </span> <span class="text"> Ready for pickup </span> </div>
+                                                </div>
                                             @elseif($order->status == 'Canceled')
                                                 <a href="#" class="btn btn-cancel" data-abc="true">Payment Failed/Pay Now</a>
                                             @else
