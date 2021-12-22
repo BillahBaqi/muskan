@@ -162,7 +162,7 @@
                                 </div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-info">Add Subcategory</button>
+                        <button type="submit" class="btn btn-info">Add User</button>
                     </form>
 
                 </div>

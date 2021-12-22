@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Validation\Rules\Exists;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -64,6 +65,8 @@ class HomeController extends Controller
                     'name' => $request->name,
                     'email' => $request->email,
                     'role' => $request->role,
+                    'created_at' => Carbon::now(),
+                    'email_verified_at' => Carbon::now(),
                 ]);
                 return back()->with('success', ' This User Added Successfully!');
             }
