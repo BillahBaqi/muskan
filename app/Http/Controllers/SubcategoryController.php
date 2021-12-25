@@ -16,7 +16,7 @@ class SubcategoryController extends Controller
         $subcategories = Subcategory::latest()->get();
         $total_subcategory = Subcategory::count();
         $trash_subcategories = Subcategory::onlyTrashed()->get();        
-        return view('admin\subcategory\index', compact('categories', 'subcategories', 'total_subcategory', 'trash_subcategories'));
+        return view('admin.subcategory.index', compact('categories', 'subcategories', 'total_subcategory', 'trash_subcategories'));
     }
 
     public function insert(SubcategoryRequest $request)
@@ -43,7 +43,7 @@ class SubcategoryController extends Controller
         $subcategories = Subcategory::latest()->get();
         $total_subcategory = Subcategory::count();
         $trash_subcategories = Subcategory::onlyTrashed()->get();
-        return view('admin\subcategory\edit', compact('categories', 'subcategories', 'total_subcategory', 'trash_subcategories', 'subcategory_all'));
+        return view('admin.subcategory.edit', compact('categories', 'subcategories', 'total_subcategory', 'trash_subcategories', 'subcategory_all'));
     }
 
     public function update(SubcategoryRequest $request, $subcategory_id)

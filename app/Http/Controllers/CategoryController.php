@@ -15,7 +15,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         $total_category = Category::count();
-        return view('admin\category\index', compact('categories', 'total_category'));
+        return view('admin.category.index', compact('categories', 'total_category'));
     }
 
     public function edit($category_id)
@@ -23,7 +23,7 @@ class CategoryController extends Controller
         $categories = Category::all();
         $total_category = Category::count();
         $category_all = Category::where('id', $category_id)->first();
-        return view('admin\category\edit', compact('categories', 'total_category', 'category_all'));
+        return view('admin.category.edit', compact('categories', 'total_category', 'category_all'));
     }
 
     public function update(CategoryRequest $request, $category_id)

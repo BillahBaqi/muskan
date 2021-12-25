@@ -42,7 +42,7 @@ class CheckoutController extends Controller
         $categories = Category::all();
         $cart_products = Cart::where('random_generated_id', Cookie::get('cart_cookie'))->where('status', 1)->get();
         $countries = Country::select('id', 'name')->get();
-        return view('frontend\checkout', [
+        return view('frontend.checkout', [
             'categories' => $categories,
             'countries' => $countries,
             'cart_products' => $cart_products,

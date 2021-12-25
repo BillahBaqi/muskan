@@ -39,7 +39,7 @@ class HomeController extends Controller
         $admins = User::where('id', '!=', $logged_user_id)->where('role', '!=', 'USR')->Paginate(5);
         $logged_user = Auth::user()->name;
         $total_user =  User::count();
-        return view('admin\user\users', compact('users', 'logged_user', 'total_user', 'admins'));
+        return view('admin.user.users', compact('users', 'logged_user', 'total_user', 'admins'));
         
     }
     public function insert(Request $request)

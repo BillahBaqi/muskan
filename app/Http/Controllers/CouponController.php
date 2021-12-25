@@ -11,7 +11,7 @@ class CouponController extends Controller
 {
     public function index(){
         $coupons = Coupon::all();
-        return view('admin\coupon\index', compact('coupons'));
+        return view('admin.coupon.index', compact('coupons'));
     }
 
     public function insert(CouponRequest $request){
