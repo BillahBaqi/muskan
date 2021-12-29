@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 
 class RegisterController extends Controller
 {
@@ -39,7 +41,10 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        Session::put('backUrl', URL::previous());
     }
+
+
 
     /**
      * Get a validator for an incoming registration request.
@@ -70,4 +75,10 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function redirectTo()
+    {
+        return Session::get('backUrl') ? Session::get('backUrl') :   $this->redirectTo;
+    }
 }
+

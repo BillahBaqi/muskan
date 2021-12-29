@@ -30,6 +30,7 @@ Route::get('/category/{category_name}', [FrontendController::class, 'category'])
 Route::get('/order/success', [FrontendController::class, 'success']);
 Route::get('/invoice/{order_id}', [FrontendController::class, 'invoice']);
 Route::get('/invoice/download/{order_id}', [FrontendController::class, 'invoice_download']);
+Route::post('/review', [FrontendController::class, 'review_post'])->name('review');
 
 
 

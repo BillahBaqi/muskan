@@ -112,6 +112,17 @@
                                 @endif
                             </div>
                             <button type="submit">SIGN IN</button>
+                            <div class="row">
+                                <div class="col-sm-6 text-center">
+                                    <button style="background: #4285f4"><span style="font-size:20px;"><i class="fa fa-google" aria-hidden="true"></i>
+                                </span> Sign In With Google</button>
+                                </div>
+                                <div class="col-sm-6 text-center">
+                                    <button  style="background: rgb(4, 12, 20)"><span style="font-size:20px;"><i class="fa fa-github" aria-hidden="true"></i>
+                                </span> Sign In With Github</button>
+                                </div>
+
+                            </div>
                             <div class="text-center">
                                 <a href="{{ route('register') }}">Or Creat an Account</a>
                             </div>

@@ -21,6 +21,8 @@ class CreateOrderProductDetailsTable extends Migration
             $table->string('product_name');
             $table->integer('product_price');
             $table->integer('product_quantity');
+            $table->longText('review')->nullable();
+            $table->integer('star')->nullable();
             $table->timestamps();
         });
     }

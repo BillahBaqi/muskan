@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Order_Product_Details;
 use App\Models\ProductThumbnail;
+use Illuminate\Http\Request;
 use PDF;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,6 +91,14 @@ class FrontendController extends Controller
         ]);
 
         return $pdf->download('invoice.pdf');
+    }
+    public function review_post(Request $request){
+ 
+        Order_Product_Details::where('user_id', $request->user_id)->where('product_id', $request->product_id)->update([
+            'star' => $request->star,
+            'review' => $request->massage,
+        ]);
+        return back();
     }
 
 }

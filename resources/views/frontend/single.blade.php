@@ -63,13 +63,30 @@
                         <h3>{{ $product_details->product_name }}</h3>
                         <div class="rating-wrap fix">
                             <span class="pull-left">৳ {{ $product_details->product_price }}</span>
+                            @php
+                                $total_star = App\Models\Order_Product_Details::where('product_id', $product_details->id)->whereNotNull('star')->sum('star');
+                                if ($total_star > 0) {
+                                    $rating = App\Models\Order_Product_Details::where('product_id', $product_details->id)->whereNotNull('star')->sum('star')/App\Models\Order_Product_Details::where('product_id', $product_details->id)->whereNotNull('star')->count();
+                                }
+                                else {
+                                   $rating = 0;
+                                }
+                            @endphp
                             <ul class="rating pull-right">
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li><i class="fa fa-star"></i></li>
-                                <li>(05 Customar Review)</li>
+                                @foreach(range(1,5) as $i)
+                                    @if($rating >0)
+                                        @if($rating >0.5)
+                                            <li><i class="fa fa-star"></i></li>
+                                        @else
+                                            <li><i class="fa fa-star-half-o"></i></li>
+                                        @endif
+                                    @else
+                                        <li><i class="fa fa-star-o"></i></li>
+                                    @endif
+                                    <?php $rating--; ?>
+                                @endforeach
+                                
+                                <li>({{str_pad(App\Models\Order_Product_Details::where('product_id', $product_details->id)->whereNotNull('star')->count(), 3, '0', STR_PAD_LEFT)}} Customar Review)</li>
                             </ul>
                         </div>
                         <p>{{ $product_details->product_description }}</p>
@@ -235,121 +252,109 @@
                         </div>
                         <div class="tab-pane" id="review">
                             <div class="review-wrap">
-                                <ul>
-                                    <li class="review-items">
-                                        <div class="review-img">
-                                            <img src="{{ asset('assets') }}/images/comment/1.png" alt="">
-                                        </div>
-                                        <div class="review-content">
-                                            <h3><a href="#">GERALD BARNES</a></h3>
-                                            <span>27 Jun, 2019 at 2:30pm</span>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan
-                                                egestas elese ifend. Phasellus a felis at estei to bibendum feugiat ut eget
-                                                eni Praesent et messages in con sectetur posuere dolor non.</p>
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="review-items">
-                                        <div class="review-img">
-                                            <img src="{{ asset('assets') }}/images/comment/2.png" alt="">
-                                        </div>
-                                        <div class="review-content">
-                                            <h3><a href="#">Olive Oil</a></h3>
-                                            <span>15 may, 2019 at 2:30pm</span>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan
-                                                egestas elese ifend. Phasellus a felis at estei to bibendum feugiat ut eget
-                                                eni Praesent et messages in con sectetur posuere dolor non.</p>
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star-half-o"></i></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="review-items">
-                                        <div class="review-img">
-                                            <img src="{{ asset('assets') }}/images/comment/3.png" alt="">
-                                        </div>
-                                        <div class="review-content">
-                                            <h3><a href="#">Nature Honey</a></h3>
-                                            <span>14 janu, 2019 at 2:30pm</span>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan
-                                                egestas elese ifend. Phasellus a felis at estei to bibendum feugiat ut eget
-                                                eni Praesent et messages in con sectetur posuere dolor non.</p>
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
+                                @if ($total_star === 0)
+                                    No review Yet
+                                    @else
+                                    <ul>
+                                        
+                                        @foreach (App\Models\Order_Product_details::where('product_id', $product_details->id)->whereNotNull('review')->get() as $review)
+                                        <li class="review-items">
+                                            <div class="review-img">
+                                                <img style="width:90px; border-radius: 50%;" src="{{ asset('uploads') }}/profile/{{App\Models\User::where('id', $review->user_id)->first()->profile_image}}" alt="img">
+                                            </div>
+                                            <div class="review-content">
+                                                <h3><a href="#">{{App\Models\User::where('id', $review->user_id)->first()->name}}</a></h3>
+                                                <span>{{$review->updated_at->format('d-M-Y h:iA')}}</span>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer accumsan
+                                                    egestas elese ifend. Phasellus a felis at estei to bibendum feugiat ut eget
+                                                    eni Praesent et messages in con sectetur posuere dolor non.</p>
+                                                <ul class="rating">
+                                                    <li><i class="fa fa-star"></i></li>
+                                                    <li><i class="fa fa-star"></i></li>
+                                                    <li><i class="fa fa-star"></i></li>
+                                                    <li><i class="fa fa-star"></i></li>
+                                                    <li><i class="fa fa-star"></i></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                    @endif
                             </div>
-                            <div class="add-review">
-                                <h4>Add A Review</h4>
-                                <div class="ratting-wrap">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>task</th>
-                                                <th>1 Star</th>
-                                                <th>2 Star</th>
-                                                <th>3 Star</th>
-                                                <th>4 Star</th>
-                                                <th>5 Star</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>How Many Stars?</td>
-                                                <td>
-                                                    <input type="radio" name="a" />
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="a" />
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="a" />
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="a" />
-                                                </td>
-                                                <td>
-                                                    <input type="radio" name="a" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
-                                        <h4>Name:</h4>
-                                        <input type="text" placeholder="Your name here..." />
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <h4>Email:</h4>
-                                        <input type="email" placeholder="Your Email here..." />
-                                    </div>
-                                    <div class="col-12">
-                                        <h4>Your Review:</h4>
-                                        <textarea name="massage" id="massage" cols="30" rows="10"
-                                            placeholder="Your review here..."></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn-style">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
+                            @auth
+                                @if (App\Models\Order_Product_details::where('user_id', Auth::id())->where('product_id', $product_details->id)->exists())
+                                    @if (App\Models\Order_Product_details::where('user_id', Auth::id())->where('product_id', $product_details->id)->whereNull('review')->exists())
+                                        <div class="add-review">
+                                            <form action="{{ route('review') }}" method="post">
+                                                @csrf
+                                                <h4>Add A Review</h4>
+                                                <div class="ratting-wrap">
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>task</th>
+                                                                <th>1 Star</th>
+                                                                <th>2 Star</th>
+                                                                <th>3 Star</th>
+                                                                <th>4 Star</th>
+                                                                <th>5 Star</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>How Many Stars?</td>
+                                                                <td>
+                                                                    <input type="radio" value="1" name="star" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" value="2" name="star" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" value="3" name="star" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" value="4" name="star" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" value="5" name="star" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-12">
+                                                        <h4>Name:</h4>
+                                                        <input readonly type="text" value="{{ Auth::user()->name }}" />
+                                                    </div>
+                                                    <div class="col-md-6 col-12">
+                                                        <h4>Email:</h4>
+                                                        <input type="email" value="{{ Auth::user()->email }}" />
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <h4>Your Review:</h4>
+                                                        <textarea name="massage" id="massage" cols="30" rows="10"
+                                                            placeholder="Your review here..."></textarea>
+                                                    </div>
+                                                    <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
+                                                    <input type="hidden" name="product_id"
+                                                        value="{{ $product_details->id }}" />
+
+                                                    <div class="col-12">
+                                                        <button type="submit" class="btn-style">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div class="row">
+                                            <a class="col-12"
+                                                style="height: 35px; line-height: 35px; text-align: center; background: #ef4836; color: #fff;">You
+                                                Already review This product</a>
+                                        </div>
+                                    @endif
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -388,7 +393,7 @@
                                                     class="fa fa-shopping-cart"></i></a></li>
                                             <li><a href="{{ url('/cart/addtowish') }}/{{ $product->id }}" <i
                                                     class="fa fa-heart"></i></a></li>
-                                            
+
                                         </ul>
                                     </div>
                                 </div>
